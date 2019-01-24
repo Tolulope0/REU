@@ -28,32 +28,35 @@ int main(int argc, char*argv[])
 	int numR=4;
 	while (fgets(line, 100, fp)!=NULL)
 	{
-			printf("%s",line);
+			//printf("%s",line);
 		if(j==0)
 		{
 			token= strtok(line,"\n");
-			//numR=atoi(token);//number of R in file
+			printf("%s\n",token);
+			numR=atoi(token);//number of R in file
 			R=malloc(sizeof(int*)*numR);
 			len=malloc(sizeof(int)*numR);
 			j++;
 
 		}
 		else
-		{		token= strtok(NULL,":");
-			int numNR=10;
-		//	int numNR=atoi(token);//number of items in each R
+		{	
+			printf("line: %s\n",line);
+			token= strtok(line,":");
+			printf("numR: %s\n",token);
+			int numNR=atoi(token);//number of items in each R
 			int l;
-			len[go]=numNR;
+			//len[go]=numNR;
 			R[go]=malloc(sizeof(int)*numNR);
-			/*for(l=0;l<numNR-1;l++)
+			for(l=0;l<numNR-1;l++)
 			{
 				token= strtok(NULL,",");
 				R[go][l]=atoi(token);
+				printf("%s\n",token);
 			}
 				token= strtok(NULL,"\n");
+				printf("%s\n",token);
 				R[go][l+1]=atoi(token);
-
-			*/
 			go++;
 		}
 	}
