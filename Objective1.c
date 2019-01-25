@@ -32,7 +32,7 @@ int main(int argc, char*argv[])
 		if(j==0)
 		{
 			token= strtok(line,"\n");
-			printf("%s\n",token);
+			//printf("%s\n",token);
 			numR=atoi(token);//number of R in file
 			R=malloc(sizeof(int*)*numR);
 			len=malloc(sizeof(int)*numR);
@@ -41,43 +41,56 @@ int main(int argc, char*argv[])
 		}
 		else
 		{	
-			printf("line: %s\n",line);
+	//		printf("line: %s\n",line);
 			token= strtok(line,":");
-			printf("numR: %s\n",token);
+	//		printf("numR: %s\n",token);
 			int numNR=atoi(token);//number of items in each R
 			int l;
-			//len[go]=numNR;
+			len[go]=numNR;
 			R[go]=malloc(sizeof(int)*numNR);
 			for(l=0;l<numNR-1;l++)
 			{
 				token= strtok(NULL,",");
-				R[go][l]=atoi(token);
-				printf("%s\n",token);
+			 	R[go][l]=atoi(token);
+		//		printf("%s\n",token);
 			}
 				token= strtok(NULL,"\n");
-				printf("%s\n",token);
-				R[go][l+1]=atoi(token);
+	//			printf("%s\n",token);
+				R[go][l]=atoi(token);
 			go++;
 		}
 	}
 	//int **Requests=malloc(sizeof(int*)*j);
 	fclose(fp);
 	j=0;
-/*
-	for(timestamps=1;timestamps<SIZE+1;timestamps++)
-	{
+int ran=0;
+int random=0;
+int zero=0;
+int hold=0;
+		hold=R[0][10];//picks 1 item from 1 R	
+		printf("check hold: %d\n",hold);
 		srand(time(NULL));
-		int hold;
-		int zero=0;
-		int random=(rand()%zero+numR);
+	for(timestamps=0;timestamps<SIZE;timestamps++)
+	{
+		zero=1;
+		random=(rand()%numR-1+zero);
+		printf("random:0-4: %d\n",random);
+		ran=(rand()%len[random]+zero);
+		printf("len[random]: %d\n",len[random]);	
+		printf("ran:1-10: %d\n",ran);
+		hold=R[random][ran];//picks 1 item from 1 R	
+		printf("hold: %d\n",hold);
+		/*if (j==0)
 		{
-			int ran=(rand()%zero+len[random]);
-			hold=R[random][ran];//picks 1 item from 1 R	
+			Matrix[0][0]=hold;
+			Matrix[1][0]=timestamps;
+			j++;
 		}
-		Matrix[0][0]=hold;
-		Matrix[1][0]=timestamps;
+		*/
+		Matrix[0][timestamps]=hold;
+		Matrix[1][timestamps]=timestamps+1;
 	}
-*/
+
 	int k=0;
 	while(k<numR)
 	{
