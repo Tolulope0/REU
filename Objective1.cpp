@@ -97,7 +97,7 @@ int main(int argc, char*argv[])
 		int taketotal=0;//will contain the total number of objects taken from all processes
 		char line[1000];
 		infile>> line;
-		cout<<line<<endl;
+		//cout<<line<<endl;
 		//char hold [1000]=line;
 		char *token ;
 		token = strtok(line,",");
@@ -140,6 +140,7 @@ int main(int argc, char*argv[])
        		//	numOfProcesses
 		//cout<<"taketotal= "<<taketotal<<endl;
 		int i =0;
+		srand(time(NULL));
 		vector<int>  ran;
 		vector <int>::iterator it;
 		if(PatternType==2)//randomly picked the order of the interleaving pattern
@@ -152,18 +153,13 @@ int main(int argc, char*argv[])
 				if (it==ran.end())
 				{
 					ran.push_back(rando);
-		//		cout<<"random order"<<rando<<"ran.size()"<<ran.size()<<endl;
+				cout<<"random order"<<rando<<"ran.size()"<<ran.size()<<endl;
 				}
 
 
 			}	
 		
 		}
-//Things that need to be done here
-//handle case where remaining num of takeRequest are less then the interleaving pattern
-//^ probably force  it to sequetionally just take the remainder.
-
-//possibly allow interleaving pattern order to be random as well
 		int op=0;
 		//while ((done<taketotal)&&(op!=20)) USED FOR TESTING
 		while (done<taketotal)
@@ -233,6 +229,15 @@ int main(int argc, char*argv[])
                 	cout<<seq[g]<<"|";
                 	g++;
         	}
+cout<<endl;/*
+		int time=1;
+	  while(time<seq.size())
+                {
+                        cout<<time<<"|";
+                        time++;
+                }
+*/
+
 	}
 
 }
