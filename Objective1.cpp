@@ -59,8 +59,8 @@ vector <int> take (vector<int> s , P pro)//this function will deal with distribu
 			else//random
 			{
 				int random=rand()%pro.range.size();// getting number for interleaving pattern for each process
-				cout<<"RAN: "<<random<<" Range size = "<<pro.range.size()<<endl;
-				cout<<pro.range[random]<<endl;
+			//	cout<<"RAN: "<<random<<" Range size = "<<pro.range.size()<<endl;
+			//	cout<<pro.range[random]<<endl;
 				if(pro.range[random]!=-1)
                         	{
                         	        
@@ -113,7 +113,7 @@ int main(int argc, char*argv[])
 			int min=atoi(token);
 			token = strtok(NULL,",");
 			int max=atoi(token);
-			int random=(rand()%max-1+min)%10;// getting number for interleaving pattern for each process
+			int random=(rand()%max+min)%10;// getting number for interleaving pattern for each process
 			pro.pattern=random;	
 			pro.max=max;	
 			pro.min=min;	
@@ -133,7 +133,7 @@ int main(int argc, char*argv[])
 			processes.push_back(pro);
 			loop++;
 			pro.range.clear();
-		cout<<"min= "<<pro.min<<" max= "<<max<<"Distribution:"<<pro.Distribution<<"Request to take: "<<pro.takeRequest<<"Pattern:"<<pro.pattern<<endl;
+		//cout<<"min= "<<pro.min<<" max= "<<max<<"Distribution:"<<pro.Distribution<<"Request to take: "<<pro.takeRequest<<"Pattern:"<<pro.pattern<<endl;
 		}
 		vector <int> seq;//1d integer vector
 		int done =0;
