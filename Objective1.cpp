@@ -9,15 +9,15 @@ using namespace std;
 class P
 {
 	public:
-		vector<int> range;// range of process
+		vector<int> sequence;// range of process
 		int takeRequest;// the amount to take from each process
 		int max;
 		int min;
 		int Distribution;// how the interleaved pattern num of request are take for process
 		//Ended up not using order
-	int order;//this is for the interleaving pattern; the order that each group is taken. ex:P[0]-P[1]-P[2] or P[1]-P[0]-P[2] or P[2]-P[1]-P[0] etc..
+		int order;//this is for the interleaving pattern; the order that each group is taken. ex:P[0]-P[1]-P[2] or P[1]-P[0]-P[2] or P[2]-P[1]-P[0] etc..
 		//in this case 1= sequencial, 2 equals random
-		
+		int minP,maxP;
 		
 		int pattern;//interleaving pattern- randomly generate the # of request taken from each process  based on the # of request in each process, and store it here
 		
@@ -30,18 +30,15 @@ vector <int> take (vector<int> s , P pro)//this function will deal with distribu
 {
 	int u=0;
 	int ran=0;
-	while(ran<pro.range.size())
+	while(ran<pro.sequence.size())
 	{
-		
-		
-
 		if(pro.takeRequest < pro.pattern)
 		{
 
-			if(pro.range[ran]!=-1)
+		//	if(pro.range[ran]!=-1)
 
 			{	
-				s.push_back(pro.range[ran]);
+				s.push_back(pro.sequence[ran]);// range of process
 				u++;	
 			}
 		}
@@ -49,31 +46,24 @@ vector <int> take (vector<int> s , P pro)//this function will deal with distribu
 		{	
 			if(pro.Distribution==1)//seqeun
 			{
-				if(pro.range[ran]!=-1)
-				{
-					s.push_back(pro.range[ran]);
-					pro.range[ran]=-1;
+					s.push_back(pro.sequence[ran]);
 					u++;//checks to see if all require request where taken
-				}
 			}
 			else//random
 			{
-				int random=rand()%pro.range.size();// getting number for interleaving pattern for each process
+				int random=rand()%pro.sequence.size();// getting number for interleaving pattern for each process
 			//	cout<<"RAN: "<<random<<" Range size = "<<pro.range.size()<<endl;
-			//	cout<<pro.range[random]<<endl;
-				if(pro.range[random]!=-1)
-                        	{
                         	        
-					s.push_back(pro.range[random]);
-                        	        pro.range[random]=-1;
+					s.push_back(pro.sequence[random]);
                         	        u++;//checks to see if all require request where taken
-                        	}
+                        
 
 			}	
 		}
 		ran++;
 		if(u==pro.pattern)
 		{
+	//		cout<<"u="<<u<<endl;
 			break;
 		}
 		
@@ -100,16 +90,20 @@ int main(int argc, char*argv[])
 		//cout<<line<<endl;
 		//char hold [1000]=line;
 		char *token ;
-		token = strtok(line,",");
+		//token = strtok(line,",");
 		//line =hold;
-		int numOfProcesses= atoi(token);//number of processes in file
-		token = strtok(NULL,",");
-		int PatternType=atoi(token);
+		int numOfProcesses=0;
+		//= atoi(token);//number of processes in file
+		//token = strtok(NULL,",");
+		//int PatternType=0;
+		//	atoi(token);
 		int loop=0;
 		P pro;
-		while(loop<numOfProcesses)
+		//while(loop<numOfProcesses)
+		while (!infile.eof())
 		{
-			token = strtok(NULL,",");
+			numOfProcesses++;
+			token = strtok(line,",");
 			int min=atoi(token);
 			token = strtok(NULL,",");
 			int max=atoi(token);
@@ -119,7 +113,7 @@ int main(int argc, char*argv[])
 			pro.min=min;	
 			while (min<=max)
 			{
-				pro.range.push_back(min);
+				pro.sequence.push_back(min);
 				min++;
 			}
 			token = strtok(NULL,",");
@@ -128,14 +122,23 @@ int main(int argc, char*argv[])
 			token = strtok(NULL,",");
 			pro.Distribution=atoi(token);
 			token = strtok(NULL,",");
+			pro.minP=atoi(token);
+			token = strtok(NULL,",");
+			pro.maxP=atoi(token);
+			token = strtok(NULL,"\n");
 			pro.order=atoi(token);
 			//cout<<token<<endl;
 			processes.push_back(pro);
 			loop++;
-			pro.range.clear();
-		//cout<<"min= "<<pro.min<<" max= "<<max<<"Distribution:"<<pro.Distribution<<"Request to take: "<<pro.takeRequest<<"Pattern:"<<pro.pattern<<endl;
+			pro.sequence.clear();
+			infile>>line;
+	//	cout<<"min= "<<pro.min<<" max= "<<max<<"Distribution:"<<pro.Distribution<<"Request to take: "<<pro.takeRequest<<"Pattern range: ["<<pro.minP<<":"<<pro.maxP<<"]"<<" Pattern order: "<<pro.order<<endl;
 		}
-		vector <int> seq;//1d integer vector
+		
+		infile.close();
+		
+		
+
 		int done =0;
        		//	numOfProcesses
 		//cout<<"taketotal= "<<taketotal<<endl;
@@ -143,101 +146,103 @@ int main(int argc, char*argv[])
 		srand(time(NULL));
 		vector<int>  ran;
 		vector <int>::iterator it;
-		if(PatternType==2)//randomly picked the order of the interleaving pattern
+		while (ran.size()<numOfProcesses)//forcing processes to run in sequence
 		{
-			while (ran.size()<numOfProcesses)
-			{
-				int rando=rand()%numOfProcesses;// getting number for interleaving pattern for each process
-
-				it = find(ran.begin(),ran.end(),rando);
-				if (it==ran.end())
-				{
-					ran.push_back(rando);
-				cout<<"random order"<<rando<<"ran.size()"<<ran.size()<<endl;
-				}
-
-
-			}	
-		
+			int rando =0;
+			ran.push_back(rando);
+			rando++;
+					//		cout<<"random order"<<rando<<"ran.size()"<<ran.size()<<endl;
 		}
+
+
+			
+		int gp=0;
+//		vector<int>seq;	
+		vector <int> seq;//1d integer vector
+
+		vector<int>hol;	
+		int opi=0;
 		int op=0;
-		//while ((done<taketotal)&&(op!=20)) USED FOR TESTING
+                int io=0;
+	//	while ((done<taketotal)&&(op!=20)) //USED FOR TESTING
 		while (done<taketotal)
 		{
-			if(i == numOfProcesses)
-			{
-				i=0;
-			}
-			if(((PatternType==1)&&(processes[i].takeRequest==0))||((PatternType==2)&&processes[ran[i]].takeRequest==0))
-			{
-				//cout<<"DONE PROCCESS ["<<ran[i]<<"]"<<endl;
-				//cout<<"PROCESS.REQUEST= "<<processes[ran[i]].takeRequest<<endl;
-			}	
-			else if(PatternType ==1)//sequencial
-			{			
-			//forced interleaving pattern to be sequential
-			
+			 if(i == numOfProcesses)
+                        {
+                                i=0;
+                                opi++;
+                        }
 
-				if (processes[i].takeRequest<processes[i].pattern)
-                        	{
-					//cout<<"HELLO :"<<processes[i].takeRequest<<"  i= "<<i<<endl;
-					//cout<<"REquest ="<<processes[i].takeRequest<<endl;
-					done+=processes[i].takeRequest;
-                                        processes[i].pattern=processes[i].takeRequest;
-					processes[i].takeRequest=0;
-					seq=take(seq,processes[i]);
-                        	}	
-				else
+			 
+                	if(opi==0)
+			{
+        			int go=processes[i].minP;
+				while(go<processes[i].maxP)
 				{
-					done+=processes[i].pattern;
-					seq=take(seq,processes[i]);
-					processes[i].takeRequest-=processes[i].pattern;
+                			hol.push_back(go);
+                			go++;
+		
 				}
 
-
 			}
-			else// random	
+      			if(processes[i].order == 1)
+        		{
+				if(gp==hol.size())
+				{
+					gp=0;
+				}
+                        
+              			processes[i].pattern=hol[gp];
+				gp++;
+
+        		}
+        		if(processes[i].order == 2)
+        		{
+				processes[i].pattern=rand()%processes[i].maxP;// getting number for interleaving pattern for each process	
+			}
+			if (processes[i].takeRequest<processes[i].pattern)
+                 	{
+          //                	        cout<<"Request :"<<processes[i].takeRequest<<"  pattern= "<<processes[i].pattern<<endl;
+				if(processes[i].takeRequest==0)
+					io=9;
+				done+=processes[i].takeRequest;
+                                processes[i].pattern=processes[i].takeRequest;
+				processes[i].takeRequest=0;
+				if(io!=9)//if request are zero than dont call function
+					seq=take(seq,processes[i]);
+	//	cout<<"seq= "<<seq.size()<<endl;
+                        }	
+			else
 			{
-
-                                if (processes[ran[i]].takeRequest<processes[ran[i]].pattern)
-                                {
-                          //            cout<<"HELLO :"<<processes[ran[i]].takeRequest<<"  i= "<<ran[i]<<endl;
-                          //            cout<<"REquest ="<<processes[ran[i]].takeRequest<<endl;
-                                        done+=processes[ran[i]].takeRequest;
-                                        processes[ran[i]].pattern=processes[ran[i]].takeRequest;
-                                        processes[ran[i]].takeRequest=0;
-                               		seq=take(seq,processes[ran[i]]);
-                                }
-                                else
-                                {       done+=processes[ran[i]].pattern;
-                                	seq=take(seq,processes[ran[i]]);
-					processes[ran[i]].takeRequest-=processes[ran[i]].pattern;
-                                }
-
-                                                          
-
+        //                  	        cout<<"Request :"<<processes[i].takeRequest<<"  pattern= "<<processes[i].pattern<<endl;
+					//cout<<"Done ="<<done<<endl;
+				done+=processes[i].pattern;
+				seq=take(seq,processes[i]);
+				processes[i].takeRequest-=processes[i].pattern;
+	//	cout<<"seq= "<<seq.size()<<endl;
 			}
 
-			//cout<<"done= "<<done<<endl;
-			op++;	
-			i++;
-		}
-		cout<<"seq= "<<seq.size()<<endl;
-		int g=0;
-        	while(g<seq.size())
-        	{
-                	cout<<seq[g]<<"|";
-                	g++;
-        	}
-cout<<endl;/*
-		int time=1;
-	  while(time<seq.size())
-                {
-                        cout<<time<<"|";
-                        time++;
-                }
-*/
 
+		
+		io=0;
+	//		cout<<"done= "<<done<<endl;
+		op++;	
+		i++;
+	}
+	//	cout<<"seq= "<<seq.size()<<endl;
+	int g=0;
+       ofstream outFile;
+       outFile.open("request.txt");
+       	while(g<seq.size())
+        {
+               outFile<<seq[g]<<"\n";
+               	//cout<<seq[g]<<"\n";
+                g++;
+        }
+	outFile.close();
+	
+	
+	
 	}
 
 }
