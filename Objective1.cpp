@@ -35,10 +35,11 @@ vector <int> take (vector<int> s , P pro)//this function will deal with distribu
 		if(pro.takeRequest < pro.pattern)
 		{
 
-		//	if(pro.range[ran]!=-1)
+			if(pro.sequence[ran]!=-1)
 
 			{	
 				s.push_back(pro.sequence[ran]);// range of process
+					pro.sequence[ran]=-1;
 				u++;	
 			}
 		}
@@ -46,17 +47,24 @@ vector <int> take (vector<int> s , P pro)//this function will deal with distribu
 		{	
 			if(pro.Distribution==1)//seqeun
 			{
+				
+				if(pro.sequence[ran]!=-1)
+				{
 					s.push_back(pro.sequence[ran]);
 					u++;//checks to see if all require request where taken
+					pro.sequence[ran]=-1;
+				}
 			}
 			else//random
 			{
 				int random=rand()%pro.sequence.size();// getting number for interleaving pattern for each process
 			//	cout<<"RAN: "<<random<<" Range size = "<<pro.range.size()<<endl;
                         	        
-					s.push_back(pro.sequence[random]);
-                        	        u++;//checks to see if all require request where taken
-                        
+					if(pro.sequence[ran]!=-1)
+					{	
+						s.push_back(pro.sequence[random]);
+                        	        	u++;//checks to see if all require request where taken
+					}
 
 			}	
 		}
@@ -77,7 +85,7 @@ int main(int argc, char*argv[])
 {
 	vector <P> processes;//double vector created
 	ifstream infile;
-	infile.open("standardrequest.txt");
+	infile.open("input.txt");
 	if(!infile.is_open())
 	{
 		cout<<"file not found"<<endl;
@@ -218,10 +226,10 @@ int main(int argc, char*argv[])
 					//cout<<"Done ="<<done<<endl;
 				done+=processes[i].pattern;
 				seq=take(seq,processes[i]);
+		
 				processes[i].takeRequest-=processes[i].pattern;
 	//	cout<<"seq= "<<seq.size()<<endl;
 			}
-
 
 		
 		io=0;
@@ -232,7 +240,7 @@ int main(int argc, char*argv[])
 	//	cout<<"seq= "<<seq.size()<<endl;
 	int g=0;
        ofstream outFile;
-       outFile.open("request.txt");
+       outFile.open("trace-SRS-SRS.txt");
        	while(g<seq.size())
         {
                outFile<<seq[g]<<"\n";
