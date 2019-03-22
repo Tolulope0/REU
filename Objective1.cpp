@@ -185,12 +185,12 @@ int main(int argc, char*argv[])
 				}
 				processes[i].pattern = hol[gp];
 				gp++;
-			//cout<<"Pattern of "<<"P"<<i<<" "<<processes[i].pattern<<endl;
+		//	cout<<"Pattern of "<<"P"<<i<<" "<<processes[i].pattern<<endl;
 			}
 			if (processes[i].order == 2)
 			{
 				processes[i].pattern = rand() % processes[i].maxP;// getting number for interleaving pattern for each process	
-			//cout<<"Pattern of "<<"P"<<i<<" "<<processes[i].pattern<<endl;
+		//	cout<<"Pattern of "<<"P"<<i<<" "<<processes[i].pattern<<endl;
 			}
 			if (processes[i].takeRequest < processes[i].pattern||((processes[i].takeRequest==0)&&(processes[i].pattern==0)))
 			{
@@ -236,7 +236,7 @@ int main(int argc, char*argv[])
 
 		int g = 0;
 		ofstream outFile;
-		outFile.open("trace-SRS-SRS.txt");
+		outFile.open("trace-SRR-SRS.txt");
 		while (g < seq.size())
 		{
 			outFile<<seq[g]<<"\n";
