@@ -79,11 +79,12 @@ class LRU
 
 int main()
 {
+	int LIMIT=4;
         LRU BUFFER(5);
 	ifstream infile;
 	char *token;	
 	char line [10];
-       	infile.open("trace-SRS-SRS.txt");
+       	infile.open("trace-SRR-SRS.txt");
         if(!infile.is_open())
         {
                 cout<<"file not found"<<endl;
@@ -122,16 +123,17 @@ int main()
 			counter++;
 		}
 		*/
+
 		miss++;
 		while (counter <100)
         	{        
 
-				if(Prebuff.size()>=5)
+				if(Prebuff.size()>=LIMIT)
 					hi=0;
 				else
 					hi=1;
 			int see=sequence[counter];
-                	cout<<see<<"MISS= "<<miss<<endl;
+                	cout<<see<<" MISS= "<<miss<<endl;
 
 			if(cat==0)//beginning of sequence
 			{
@@ -160,7 +162,7 @@ int main()
 					Prebuff.push_back(sequence[counter]);
 				
 				}
-				else if(Prebuff.size()<5)
+				else if(Prebuff.size()<LIMIT)
 				//else
 				{
 					Prebuff.clear();
@@ -168,7 +170,7 @@ int main()
 					cat=0;				
 				}
 				
-				if((Prebuff.size()>=5))
+				if((Prebuff.size()>=LIMIT))
 				{
                                 	cout<<"Long enough sequence!- MISS= "<<miss<<endl;
 			//		cout<<"g = "<<g<<"see= "<<see<<endl;
