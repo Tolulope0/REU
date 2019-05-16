@@ -221,7 +221,7 @@ int main(int argc, char*argv[])
 		while (g < seq.size())
 		{
 			outFile<<seq[g]<<"\n";
-			//cout << seq[g] << "\n";
+			cout << seq[g] << "\n";
 			g++;
 		}
 		outFile.close();

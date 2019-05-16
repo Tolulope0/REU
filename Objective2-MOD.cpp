@@ -8,37 +8,20 @@
 using namespace std;
 
 
-
-
-
-
-
-
-	
-
-
-
 int miss=0, hit=0;
 bool check=false;
 class LRU
 {
 	list<int>buf;
 	unordered_map<int,list<int>::iterator>my;
-	int csize;
+	int cachesize;
 
 	public:
 	LRU(int n)
 	{
-		csize=n;
+		cachesize=n;
 	}	
 
-	void display()
-	{
-		cout<<"Prefetch buffer: ";	
-		for( list<int>::iterator it =buf.begin();it != buf.end();++it)
-			cout<<(*it)<<" ";
-		cout<<endl;	
-	}
 	void refer(int x)
 	{
 
@@ -47,7 +30,7 @@ class LRU
 
 				miss++;
 		if(check!=true){
-			if(buf.size() ==csize)
+			if(buf.size() ==cachesize)
 			{
 
 				int last=buf.back();
@@ -72,26 +55,25 @@ class LRU
 		my[x]=buf.begin();
 		}
 		check=false;
-		display();
 	}
 
 };
 
 int main()
 {
-	int LIMIT=4;
-        LRU BUFFER(5);
+	int LIMIT=4;//prefetch when sequence of size <- is found
+        LRU BUFFER(5);//size of cache
 	ifstream infile;
 	char *token;	
 	char line [10];
        	infile.open("trace-SRR-SRS.txt");
-        if(!infile.is_open())
+	if(!infile.is_open())
         {
                 cout<<"file not found"<<endl;
         }
 	else
         {
-        	vector<int> sequence;
+        	vector<int> sequence;//store input file data into input sequence
         	infile>>line;
         	token=strtok(line,"\n");
         	sequence.clear();
@@ -101,9 +83,10 @@ int main()
         	   	//cout<<"token = "<<token<<endl;
 		       	token=strtok(line,"\n");
         	        sequence.push_back(atoi(token));
-        	}
-		sequence.pop_back();
-		//cout<<"S Size = "<<sequence.size();
+        	
+		}
+		sequence.pop_back();//pop off repeat
+		cout<<"S Size = "<<sequence.size();
         	vector <int> Prebuff;
 		//vector <int >bufferb;
 		int h=0;
@@ -115,14 +98,6 @@ int main()
                 	check=false;
 
 		vector <int>::iterator it;
-        	/*
-		while (counter <100)
-		{
-			int see=sequence[counter];
-                	cout<<see<<endl;
-			counter++;
-		}
-		*/
 
 		miss++;
 		while (counter <100)
@@ -133,7 +108,7 @@ int main()
 				else
 					hi=1;
 			int see=sequence[counter];
-                	cout<<see<<" MISS= "<<miss<<endl;
+                	cout<<see<<endl;
 
 			if(cat==0)//beginning of sequence
 			{
@@ -172,7 +147,7 @@ int main()
 				
 				if((Prebuff.size()>=LIMIT))
 				{
-                                	cout<<"Long enough sequence!- MISS= "<<miss<<endl;
+               //                 	cout<<"Long enough sequence!- MISS= "<<miss<<endl;
 			//		cout<<"g = "<<g<<"see= "<<see<<endl;
 					if(g!=see){
 					PreOn=true;
@@ -205,9 +180,8 @@ int main()
 		}
        	
 		cout<<"Total number of hits: "<<hit<<" Total number of misses: "<<miss<<endl;
-	float ratio =hit/miss;
-		//cout<<"Hit/Mess ratio: "<<(float)(hit/miss)<<endl;
-	//	cout<<"Hit/Mess ratio: "<<ratio<<endl;
+
+		
 	}
 
 }

@@ -12,8 +12,9 @@ int main()
 	ifstream infile;
 	char *token;	
 	char line [10];
-	infile.open("request.txt");
-        if(!infile.is_open())
+	//infile.open("request.txt");
+	infile.open("trace-SRR-SRS.txt"); 
+	if(!infile.is_open())
         {
                 cout<<"file not found"<<endl;
         }
@@ -32,7 +33,9 @@ int main()
         	}
 		sequence.pop_back();
 		cout<<sequence.size();
-        	vector <int> bufferb;
+        for(int u=0;u<100;u++)
+		cout<<sequence[u]<<endl;
+		vector <int> bufferb;
 		int h=0;
         	int counter=0;
         	bool check=false;
